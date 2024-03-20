@@ -1,0 +1,81 @@
+.app-header>nav:last-child {
+    flex: 1;
+    padding-right: 30px;
+}
+
+.app-header>nav {
+    display: flex;
+    box-sizing: border-box;
+    align-items: center;
+}
+
+.spinner {
+    -webkit-animation: rotate-a69ef46a 2s linear infinite;
+    animation: rotate-a69ef46a 2s linear infinite;
+    z-index: 2;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -10px 0 0 -10px;
+    width: 20px;
+    height: 20px;
+}
+
+.action-item {
+    display: flex;
+    align-items: center;
+    height: 40px;
+    border-radius: 50px;
+    border: 1px solid #000;
+    box-sizing: border-box;
+    background: var(--primary-20, linear-gradient(0deg, rgba(0, 0, 0, .2) 0%, rgba(0, 0, 0, .2) 100%), linear-gradient(0deg, rgba(0, 0, 0, .2) 0%, rgba(0, 0, 0, .2) 100%), linear-gradient(0deg, rgba(0, 0, 0, .2) 0%, rgba(0, 0, 0, .2) 100%), #2d436c);
+    box-shadow: 0 4px 10px #0003;
+    padding-left: var(--spacer-lg);
+    padding-right: var(--spacer-lg);
+}
+
+@media (max-width: 975px) {
+    .action-item {
+        border: 1px solid #e4d7d7 !important;
+        margin-top: 30px;
+        margin-left: auto !important;
+        margin-right: auto;
+    }
+}
+
+button,
+input[type=button],
+.btn {
+    align-items: center;
+    background-color: var(--color-button-background);
+    border-radius: var(--border-btn-radius);
+    border: var(--border-width) solid var(--color-button-background);
+    color: var(--color-button);
+    cursor: pointer;
+    display: inline-flex;
+    font-size: var(--font-size-sm);
+    justify-content: center;
+    padding: var(--spacer-xs) var(--spacer-sm);
+    touch-action: manipulation;
+    transition-duration: var(--transition-speed);
+    transition-property: background-color, border-color, color;
+    user-select: none;
+    font-weight: 600;
+}
+
+.action-item-text {
+    margin-left: var(--spacer-lg);
+    /* color: #6295f9; */
+    font-size: var(--font-size-base);
+    color: white;
+}
+
+/* span {
+    visibility: hidden;
+    opacity: 0;
+    transition-delay: .25s;
+    transition-duration: .5s;
+    font-weight: 700;
+    margin-right: 2rem;
+    position: relative;
+} */

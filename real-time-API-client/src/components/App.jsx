@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import "../index.css";
 // import Leaflet from "./Leaflet";
-import Navbar from "./Navbar";
+import Navbar from "./navbar/Navbar";
 // import SideBar from "./SideBar";
 import "./css/App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";

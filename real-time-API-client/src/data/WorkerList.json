@@ -17,6 +17,23 @@
     "status": "Active"
   },
   {
+    "id": 50,
+    "capacity": 1.9,
+    "pcname": "DESKTOP-TFG2076",
+    "hardwareid": "HW123",
+    "storage": "1098.32GB SSD",
+    "longitude": 105.8671,
+    "latitude": 20.9928,
+    "bandwidth": "72.2 Mpbs",
+    "GPU_total": 2,
+    "gpu_name": "1x3060ti",
+    "Rammemory": "31.96GB DDR4",
+    "cpu": "4 Cores",
+    "created_at": "02/20/2024",
+    "updated_at": "02/20/2024",
+    "status": "Active"
+  },
+  {
     "id": 2,
     "capacity": 1,
     "pcname": "Hieuhihi",

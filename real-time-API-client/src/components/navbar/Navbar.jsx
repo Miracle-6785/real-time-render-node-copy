@@ -1,6 +1,7 @@
 import React from "react";
 // import { NavLink } from "react-router-dom";
-import "./css/Navbar.css";
+import "../css/Navbar.css";
+import DownloadButton from "./DownloadButton";
 
 function activeNav(event) {
   // Remove the "router-link-active" class from all links first
@@ -48,6 +49,7 @@ export default function Navbar() {
           </li>
         </ul>
       </nav>
+      <DownloadButton></DownloadButton>
     </header>
   );
 }

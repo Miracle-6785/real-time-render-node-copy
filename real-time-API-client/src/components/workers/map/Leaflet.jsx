@@ -58,7 +58,7 @@ const Leaflet = ({ new_lng = null, new_lat = null }) => {
 
   if (new_lng !== null && new_lat !== null) {
     position = [new_lat, new_lng];
-    zoom = 10;
+    zoom = 18;
     // alert(`lng: ${new_lng}, lat: ${new_lat}`);
   }
 
