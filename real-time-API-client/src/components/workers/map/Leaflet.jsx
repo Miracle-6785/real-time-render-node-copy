@@ -1,49 +1,27 @@
-// import L from "leaflet";
 import React, { useState, useEffect } from "react";
 import { Map, TileLayer, ZoomControl } from "react-leaflet";
 import MarkerCluster from "./Cluster";
 import WorkerList from "../../../data/WorkerList.json";
-import "../../css/Map.css";
+import "../../css/map.css";
 
-var position = [51.505, -0.09];
 const mapStyle = {
-  height: "calc(100vh - 80px)", // Adjust 64px according to your navbar height
-  maxHeight: "calc(100vh - 80px)", // Set a max height as well
-  // overflow: "auto", // Add overflow auto to enable scrolling if necessary
+  height: "calc(100vh - 80px)",
+  maxHeight: "calc(100vh - 80px)",
 };
-// var Map = L.map('map');
-// var map = L.map("map", {
-//   maxZoom: 20,
-//   minZoom: 6,
-//   zoomControl: false,
-// });
 
-// L.control
-//   .zoom({
-//     position: "bottomright",
-//   })
-//   .addTo(map);
-
-const Leaflet = ({ new_lng = null, new_lat = null }) => {
+const Leaflet = ({ new_lng = null, new_lat = null, onMoveEnd, displayedMarkers, setDisplayedMarkers }) => {
   const [workerList, setWorkerList] = useState([]);
-  useEffect(() => {
-    // Function to load data from JSON
-    const loadData = () => JSON.parse(JSON.stringify(WorkerList));
 
-    // Load data and set worker list
+  useEffect(() => {
+    const loadData = () => JSON.parse(JSON.stringify(WorkerList));
     const Data = loadData();
     setWorkerList(Data);
-    console.log(Data);
   }, []);
 
-  let markers;
-  // var i = 1;
-
   const addMarkers = () => {
-    markers = [];
+    const markers = [];
     workerList.forEach((worker) => {
       if (worker.status === "Active") {
-        // console.log(i++);
         markers.push({
           position: {
             lng: worker.longitude,
@@ -52,17 +30,22 @@ const Leaflet = ({ new_lng = null, new_lat = null }) => {
         });
       }
     });
+    return markers;
   };
-  addMarkers();
-  var zoom = 3;
 
+  let markers = addMarkers(); // Initialize markers
+
+  const handleMoveEnd = (displayedMarkers) => {
+    onMoveEnd(displayedMarkers); // Pass displayed markers to Main component
+  };
+
+  // Set initial position and zoom
+  let position = [51.505, -0.09];
+  let zoom = 3;
   if (new_lng !== null && new_lat !== null) {
     position = [new_lat, new_lng];
     zoom = 18;
-    // alert(`lng: ${new_lng}, lat: ${new_lat}`);
   }
-
-  // alert(new_lat);
 
   return (
     <div id="map">
@@ -73,13 +56,13 @@ const Leaflet = ({ new_lng = null, new_lat = null }) => {
         maxZoom={20}
         zoomControl={false}
         className="no-margin"
+        onMoveEnd={handleMoveEnd} // Handle moveend event
       >
-        {/* {alert(`${position}`)} */}
         <TileLayer
           url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         />
-        <MarkerCluster markers={markers} addMarkers={addMarkers} />
+        <MarkerCluster markers={markers} addMarkers={addMarkers} onMoveEnd={handleMoveEnd} setDisplayedMarkers={setDisplayedMarkers}/>
         <ZoomControl position="bottomright" />
       </Map>
     </div>

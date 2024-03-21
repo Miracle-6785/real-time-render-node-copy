@@ -47,3 +47,23 @@
     align-items: center;
     justify-content: center;
 }
+
+.basic-data-active {
+    background: var(--list-open-bg, #293c60);
+    border-bottom: 1px solid #000;
+}
+
+@media (max-width: 960px) and (min-width: 601px) {
+    .basic-data {
+        padding: 15px 25px;
+    }
+
+    .worker-list>div:first-child>.worker-item {
+        border-top: none;
+    }
+
+    .worker-item {
+        border-top: 1px solid #000;
+        border-bottom: none;
+    }
+}

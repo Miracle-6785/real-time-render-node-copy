@@ -3,18 +3,46 @@ import WorkerList from "../../../data/WorkerList.json";
 import DropDown from "./DropDown";
 import "../../css/SideBar.css";
 import "../../css/WorkerHeader.css";
+import MarkerCluster from "../map/Cluster";
 
-const SideBar = ({ changeToLocation }) => {
+const SideBar = ({ changeToLocation, displayedMarkers, onMoveEnd }) => {
   const [workerList, setWorkerList] = useState([]);
   const [totalNode, setTotalNode] = useState(0);
   const [totalCapacity, setTotalCapacity] = useState(0);
-
+  
   useEffect(() => {
     const loadData = () => JSON.parse(JSON.stringify(WorkerList));
     const data = loadData();
     setWorkerList(data);
     calculateTotals(data);
   }, []);
+  
+  useEffect(() => {
+    if (!displayedMarkers || displayedMarkers.length === 0) return;
+    console.log(displayedMarkers);
+    // Define a function to filter WorkerList based on displayedMarkers
+    const filterWorkerList = () => {
+      if (!Array.isArray(displayedMarkers)) {
+        return;
+      }
+    
+      const filteredWorkers = WorkerList.filter(worker => {
+        for (const marker of displayedMarkers) {
+          if (marker.getLatLng().lat === worker.latitude && marker.getLatLng().lng === worker.longitude) {
+            return true;
+          }
+        }
+        return false;
+      });
+      console.log("filtered: "+ filteredWorkers.length);
+      // Update workerList state with filtered workers
+      setWorkerList(filteredWorkers);
+    };
+    
+    // Call the filterWorkerList function whenever displayedMarkers changes
+    filterWorkerList();
+
+  }, [displayedMarkers]);
 
   const calculateTotals = (data) => {
     let totalNodeCount = 0;

@@ -1,16 +1,57 @@
 #map { 
-    height: 100vh; 
-    margin: 0;
-    background-color: #202020;
-  }
-  
-  .leaflet-layer,
-  .leaflet-control-zoom-in,
-  .leaflet-control-zoom-out,
-  .leaflet-control-attribution {
-    filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
+  height: 100vh; 
+  margin: 0;
+  background-color: #202020;
+}
+
+.leaflet-layer,
+.leaflet-control-zoom-in,
+.leaflet-control-zoom-out,
+.leaflet-control-attribution {
+  filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
+}
+
+.leaflet-container {
+  background-color:#202020;
+}
+
+.mycluster {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #2270fc;
+  z-index: 1;
+  font-size: 13px;
+  font-weight: bold;
+  position: absolute;
+}
+
+.pulse {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background: #2270fc;
+  box-shadow: 0 0 0 #2270fc;
+  transition: all .5s;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  animation: pulsing 2s linear 1.5s forwards infinite;
+  z-index: -1;
+}
+
+@keyframes pulsing {
+  0% {
+    opacity: .8;
   }
 
-  .leaflet-container {
-    background-color:#202020;
+  100% {
+    transform: scale(2.5);
+    opacity: 0;
+  }
 }
