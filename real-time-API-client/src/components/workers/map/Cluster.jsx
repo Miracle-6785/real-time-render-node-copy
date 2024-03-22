@@ -7,6 +7,8 @@ import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 
 const markerClusters = L.markerClusterGroup({
+  spiderfyOnMaxZoom: false,
+  disableClusteringAtZoom: 21,
   iconCreateFunction: function (cluster) {
     return L.divIcon({
       html: '<div class="mycluster">' +
@@ -14,29 +16,46 @@ const markerClusters = L.markerClusterGroup({
             '<div>' + cluster.getChildCount() + '</div>' +
             '</div>',
       className: 'mycluster',
-      iconSize: L.point(cluster.getChildCount()*3, cluster.getChildCount()*3)
+      iconSize: L.point(cluster.getChildCount()*5, cluster.getChildCount()*5)
     });
   }
 });
 export { markerClusters };
 
-const MarkerCluster = ({ markers, addMarkers, onMoveEnd, setDisplayedMarkers }) => {
+const MarkerCluster = ({ markers, addMarkers, onMoveEnd, setDisplayedMarkers, onMarkerClicked, new_lat, new_lng, new_zoom }) => {
   const { map } = useLeaflet();
+
+  function handleMarkerClick (e) {
+    const clickedMarker = e.target;
+    // setClickedMarker(clickedMarker);
+    onMarkerClicked(clickedMarker);
+    // console.log(clickedMarker);
+  }
+
+  if (new_lat !== null && new_lng !== null) {
+    map.flyTo(new L.latLng(new_lat, new_lng), new_zoom);
+  }
 
   useEffect(() => {
     markerClusters.clearLayers();
     map.addLayer(markerClusters); // Add marker cluster group to the map
 
+
     // Add markers to the marker cluster group
     markers.forEach(({ position }) => {
-      L.marker(new L.LatLng(position.lat, position.lng)).addTo(markerClusters);
+      L.circleMarker(new L.LatLng(position.lat, position.lng), {
+        radius: 10,
+        stroke: false,
+        fillOpacity: 1,
+        className: 'mycluster'
+      }).addTo(markerClusters).on('click', handleMarkerClick);
     });
 
     // Cleanup function to remove the marker cluster group when component unmounts
     return () => {
       map.removeLayer(markerClusters);
     };
-  }, [markers, map]);
+  }, [markers, map, onMarkerClicked]);
 
   // Get all markers currently displayed on the map
   function getDisplayedMarkers() {

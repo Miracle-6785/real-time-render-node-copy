@@ -17,6 +17,8 @@ function activeTab(event) {
 const NavBarWorkerDetail = ({
   handleWorkerDetailClick,
   handleTaskLogClick,
+  onClickedMarker,
+  clickedMarker
 }) => {
   return (
     <div className="navbar-worker">

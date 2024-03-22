@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Menu } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import WorkerOverview from "./WorkerOverview";
@@ -8,10 +8,14 @@ import NavBarWorkerDetail from "./NavBarWorkerDetail";
 import "../../css/WorkerDetail.css";
 import "../../css/SideBar.css";
 
-export default function DropDown({ worker, changeToLocation }) {
+export default function DropDown({ worker, changeToLocation, onClickedMarker, clickedMarker, setClickedMarker }) {
   const [showWorkerDetail, setShowWorkerDetail] = useState(true);
   const [showTaskLog, setShowTaskLog] = useState(false);
   const [showContent, setShowContent] = useState(false);
+
+  const handleMarkerClicked = (clickedMarker) => {
+    setClickedMarker(clickedMarker);
+  };
 
   const handleWorkerDetailClick = () => {
     setShowWorkerDetail(true);
@@ -32,9 +36,10 @@ export default function DropDown({ worker, changeToLocation }) {
         className="fit-parent full-data"
         onClick={() => {
           setShowContent((prevState) => !prevState);
-          changeToLocation(worker.longitude, worker.latitude);
-          if (showContent) {
-            changeToLocation(-0.09, 51.505);
+          if (!showContent) {
+            changeToLocation(worker.longitude, worker.latitude, 18);
+          } else {
+            changeToLocation(worker.longitude, worker.latitude, 3);
           }
         }}
       >
@@ -50,6 +55,8 @@ export default function DropDown({ worker, changeToLocation }) {
           <NavBarWorkerDetail
             handleWorkerDetailClick={handleWorkerDetailClick}
             handleTaskLogClick={handleTaskLogClick}
+            onClickedMarker={handleMarkerClicked}
+            clickedMarker={clickedMarker}
           />
           {showWorkerDetail && <WorkerDetail workerDetail={worker} />}
           {showTaskLog && <WorkerDetailTaskLog workerPcName={worker.pcname} />}

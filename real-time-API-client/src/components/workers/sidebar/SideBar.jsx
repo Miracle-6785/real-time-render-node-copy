@@ -3,12 +3,15 @@ import WorkerList from "../../../data/WorkerList.json";
 import DropDown from "./DropDown";
 import "../../css/SideBar.css";
 import "../../css/WorkerHeader.css";
-import MarkerCluster from "../map/Cluster";
 
-const SideBar = ({ changeToLocation, displayedMarkers, onMoveEnd }) => {
+const SideBar = ({ changeToLocation, displayedMarkers, onMoveEnd, onClickedMarker, clickedMarker, setClickedMarker }) => {
   const [workerList, setWorkerList] = useState([]);
   const [totalNode, setTotalNode] = useState(0);
   const [totalCapacity, setTotalCapacity] = useState(0);
+
+  const handleMarkerClicked = (clickedMarker) => {
+    setClickedMarker(clickedMarker);
+  };
   
   useEffect(() => {
     const loadData = () => JSON.parse(JSON.stringify(WorkerList));
@@ -16,10 +19,29 @@ const SideBar = ({ changeToLocation, displayedMarkers, onMoveEnd }) => {
     setWorkerList(data);
     calculateTotals(data);
   }, []);
+
+  useEffect(() => {
+    // console.log(clickedMarker);
+    if (!clickedMarker) return;
+    const filterWorkerList = () => {
+    
+      const filteredWorkers = WorkerList.filter(worker => {
+          if (clickedMarker.getLatLng().lat === worker.latitude && clickedMarker.getLatLng().lng === worker.longitude && worker.status === 'Active') {
+            return true;
+          }
+        return false;
+      });
+
+      setWorkerList(filteredWorkers);
+    };
+    
+    // Call the filterWorkerList function whenever displayedMarkers changes
+    filterWorkerList();
+  }, [clickedMarker]);
   
   useEffect(() => {
+    // console.log(displayedMarkers);
     if (!displayedMarkers || displayedMarkers.length === 0) return;
-    console.log(displayedMarkers);
     // Define a function to filter WorkerList based on displayedMarkers
     const filterWorkerList = () => {
       if (!Array.isArray(displayedMarkers)) {
@@ -28,13 +50,14 @@ const SideBar = ({ changeToLocation, displayedMarkers, onMoveEnd }) => {
     
       const filteredWorkers = WorkerList.filter(worker => {
         for (const marker of displayedMarkers) {
-          if (marker.getLatLng().lat === worker.latitude && marker.getLatLng().lng === worker.longitude) {
+          if (marker.getLatLng().lat === worker.latitude && marker.getLatLng().lng === worker.longitude && worker.status === 'Active') {
+            // console.log(marker);
             return true;
           }
         }
         return false;
       });
-      console.log("filtered: "+ filteredWorkers.length);
+      // console.log("filtered: "+ filteredWorkers.length);
       // Update workerList state with filtered workers
       setWorkerList(filteredWorkers);
     };
@@ -187,7 +210,7 @@ const SideBar = ({ changeToLocation, displayedMarkers, onMoveEnd }) => {
         <ul className="no-margin" id="worker-list">
           {workerList.map((worker) => (
             <li key={worker.id} className="mb-2 worker no-margin">
-              <DropDown worker={worker} changeToLocation={changeToLocation} />
+              <DropDown worker={worker} changeToLocation={changeToLocation} onClickedMarker={handleMarkerClicked} clickedMarker={clickedMarker}/>
             </li>
           ))}
         </ul>

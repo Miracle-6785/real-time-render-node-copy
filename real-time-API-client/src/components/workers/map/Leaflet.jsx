@@ -9,7 +9,7 @@ const mapStyle = {
   maxHeight: "calc(100vh - 80px)",
 };
 
-const Leaflet = ({ new_lng = null, new_lat = null, onMoveEnd, displayedMarkers, setDisplayedMarkers }) => {
+const Leaflet = ({ new_lng = null, new_lat = null, new_zoom = null, onMoveEnd, displayedMarkers, setDisplayedMarkers, clickedMarker, onMarkerClicked }) => {
   const [workerList, setWorkerList] = useState([]);
 
   useEffect(() => {
@@ -39,13 +39,13 @@ const Leaflet = ({ new_lng = null, new_lat = null, onMoveEnd, displayedMarkers, 
     onMoveEnd(displayedMarkers); // Pass displayed markers to Main component
   };
 
+  const handleMarkerClicked = (clickedMarker) => {
+    onMarkerClicked(clickedMarker); // Pass clicked marker to Main component
+  };
+
   // Set initial position and zoom
   let position = [51.505, -0.09];
   let zoom = 3;
-  if (new_lng !== null && new_lat !== null) {
-    position = [new_lat, new_lng];
-    zoom = 18;
-  }
 
   return (
     <div id="map">
@@ -62,7 +62,16 @@ const Leaflet = ({ new_lng = null, new_lat = null, onMoveEnd, displayedMarkers, 
           url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         />
-        <MarkerCluster markers={markers} addMarkers={addMarkers} onMoveEnd={handleMoveEnd} setDisplayedMarkers={setDisplayedMarkers}/>
+        <MarkerCluster 
+          markers={markers} 
+          addMarkers={addMarkers} 
+          onMoveEnd={handleMoveEnd} 
+          setDisplayedMarkers={setDisplayedMarkers}
+          onMarkerClicked={handleMarkerClicked}
+          new_lat={new_lat}
+          new_lng={new_lng} 
+          new_zoom={new_zoom}
+        />
         <ZoomControl position="bottomright" />
       </Map>
     </div>
